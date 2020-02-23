@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-xs-12">
+    <img class="img-responsive" src= {{imagePath}}
+         style="max-height: 300px">
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+  </div>
+</div>
+
+<legend>getSynligtOrd</legend>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="height"></label>
+  <div class="col-md-4">
+
+    <input id="height"
+           name="textinput"
+           type="text"
+           placeholder="Indtast gæt"
+           class="form-control input-md"
+           #guessInput
+           [(ngModel)]="guessValue"
+           [style.width.px] = 120
+    >
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-md-4">
+    <button id="singlebutton"
+            name="singlebutton"
+            class="btn btn-primary"
+            (click)="onClick(guessInput)"
+
+    >
+      Gæt!
+    </button>
+  </div>
+</div>
+
+<h3>Gættet på: </h3>
+{{guessString}}
+
+<!--
+<tr *ngFor="let guess of allGuesses">
+  <td>{{guess}}</td>
+</tr>
+-->
+
+
+
+
+
