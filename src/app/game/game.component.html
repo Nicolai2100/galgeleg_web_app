@@ -9,7 +9,7 @@
   </div>
 </div>
 
-<legend>getSynligtOrd</legend>
+<legend>{{getSynligtOrd}}</legend>
 <div class="form-group">
   <label class="col-md-4 control-label" for="height"></label>
   <div class="col-md-4">
@@ -31,16 +31,13 @@
     <button id="singlebutton"
             name="singlebutton"
             class="btn btn-primary"
-            (click)="onClick(guessInput)"
-
-    >
-      Gæt!
+            (click)="onClick()">Gæt!
     </button>
   </div>
 </div>
 
 <h3>Gættet på: </h3>
-{{guessString}}
+{{wrongGuessString}}
 
 <!--
 <tr *ngFor="let guess of allGuesses">

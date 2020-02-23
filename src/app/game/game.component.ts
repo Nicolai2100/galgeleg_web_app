@@ -6,13 +6,14 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
-  @ViewChild('guessInput', {static: false}) guessInputRef: ElementRef;
-  allGuesses: string [] = [];
   wordToGuess = 'bil;';
-  guessString = '';
+  wrongGuessString = '';
   guessValue = '';
+  getSynligtOrd = '***';
   numOfWrongGuesses = 0;
   imagePath = 'assets/images/galge.png';
+
+//    window.alert(guessInput.value);
 
   constructor() {
   }
@@ -20,27 +21,77 @@ export class GameComponent implements OnInit {
   ngOnInit() {
   }
 
-  onClick(guessInput: HTMLInputElement) {
-//    window.alert(guessInput.value);
-    this.allGuesses.push(guessInput.value);
-    // Opdatering af forkerte gæt strengen
-    if (this.guessString.length < 1) {
-      this.guessString = guessInput.value;
-    } else {
-      this.guessString = this.guessString + ', ' + guessInput.value;
+  onClick() {
+    if (this.guessValue.length < 1) {
+      return;
     }
-
-    // Sammenligning af gættet med ordet
-    if (guessInput.value.toLocaleLowerCase() === this.wordToGuess) {
-      window.alert('Du har vundet!');
-    } else if (this.wordToGuess.includes(guessInput.value)) {
+    if (this.wordToGuess.includes(this.guessValue)) {
+      this.opdaterSynligtOrd(this.guessValue);
     } else {
+      // Når der gættes forkert
       this.numOfWrongGuesses++;
       this.newWrongGuess();
+      if (this.wrongGuessString.length < 1) {
+        this.wrongGuessString = this.guessValue;
+      } else {
+        this.wrongGuessString = this.wrongGuessString + ', ' + this.guessValue;
+      }
     }
     this.guessValue = '';
   }
 
+  // Skal slettes/rettes
+  private opdaterSynligtOrd(guessValue: string) {
+    const wordArray: string [] = [];
+    const words = this.wordToGuess.split('');
+
+    /*
+        for (const row of this.wordToGuess) {
+          if (row.includes(guessValue)) {
+
+
+            break;
+          }
+        }*/
+
+
+    /*
+        for (let row of this.rows) {
+          if (!row.selected) {
+            this.selectAllChecked = false;
+            break;
+          }
+        }*/
+
+
+    // this.selectAllChecked = this.rows.every(row => row.selected);
+
+    let i = 0;
+    words.forEach((element) => {
+      if (!this.wordToGuess.charAt(i).includes(element)) {
+        return;
+      }
+      i++;
+    });
+    this.getSynligtOrd = 'bil';
+    window.alert('Du har vundet!');
+    return;
+    /*if (this.guessValue === this.wordToGuess) {
+      window.alert('Du har vundet!');
+    }*/
+    if (guessValue === 'b') {
+      this.getSynligtOrd = guessValue + this.getSynligtOrd.charAt(1) + this.getSynligtOrd.charAt(2);
+    } else if (guessValue === 'i') {
+      this.getSynligtOrd = this.getSynligtOrd.charAt(0) + guessValue + this.getSynligtOrd.charAt(2);
+    } else {
+      this.getSynligtOrd = this.getSynligtOrd.charAt(0) + this.getSynligtOrd.charAt(1) + guessValue;
+    }
+    if (!this.getSynligtOrd.includes('*')) {
+      window.alert('Tillykke! \n\n Du har vundet!');
+    }
+  }
+
+  // Opdaterer billedet
   newWrongGuess() {
     switch (this.numOfWrongGuesses) {
       case 0: {
@@ -71,12 +122,14 @@ export class GameComponent implements OnInit {
         this.imagePath = 'assets/images/forkert6.png';
         break;
       }
-      case 6: {
-        this.imagePath = 'assets/images/forkert6.png';
-        window.alert('Game over, tough guy!');
-        break;
-      }
+      /*
+            case 7: {
+              window.alert('Game over, tough guy!');
+              break;
+            }
+      */
       default: {
+        window.alert('Game over, tough guy!');
         break;
       }
     }
