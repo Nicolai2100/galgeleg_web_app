@@ -8,6 +8,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 export class GameComponent implements OnInit {
   @ViewChild('guessInput', {static: false}) guessInputRef: ElementRef;
   allGuesses: string [] = [];
+  wordToGuess = 'bil;';
   guessString = '';
   guessValue = '';
   numOfWrongGuesses = 0;
@@ -22,16 +23,22 @@ export class GameComponent implements OnInit {
   onClick(guessInput: HTMLInputElement) {
 //    window.alert(guessInput.value);
     this.allGuesses.push(guessInput.value);
-
+    // Opdatering af forkerte gæt strengen
     if (this.guessString.length < 1) {
       this.guessString = guessInput.value;
     } else {
       this.guessString = this.guessString + ', ' + guessInput.value;
     }
-    this.numOfWrongGuesses++;
-    this.guessValue = '';
 
-    this.newWrongGuess();
+    // Sammenligning af gættet med ordet
+    if (guessInput.value.toLocaleLowerCase() === this.wordToGuess) {
+      window.alert('Du har vundet!');
+    } else if (this.wordToGuess.includes(guessInput.value)) {
+    } else {
+      this.numOfWrongGuesses++;
+      this.newWrongGuess();
+    }
+    this.guessValue = '';
   }
 
   newWrongGuess() {
