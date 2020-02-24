@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-game',
@@ -6,12 +6,28 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
+
   wordToGuess = 'bil;';
   wrongGuessString = '';
   guessValue = '';
   getSynligtOrd = '***';
   numOfWrongGuesses = 0;
   imagePath = 'assets/images/galge.png';
+
+  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    console.log(event);
+  }
+
+
+  /*@Directive({selector: 'button[counting]'})
+class CountClicks {
+  numberOfClicks = 0;
+
+  @HostListener('click', ['$event.target'])
+  onClick(btn) {
+    console.log('button', btn, 'number of clicks:', this.numberOfClicks++);
+ }
+}*/
 
 //    window.alert(guessInput.value);
 

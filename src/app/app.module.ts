@@ -4,11 +4,13 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { GameComponent } from './game/game.component';
 import {FormsModule} from '@angular/forms';
+import { AutodirDirective } from './autodir.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GameComponent
+    GameComponent,
+    AutodirDirective
   ],
   imports: [
     BrowserModule,
