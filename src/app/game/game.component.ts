@@ -1,4 +1,6 @@
 import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {map, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-game',
@@ -6,122 +8,101 @@ import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/c
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
-
-  wordToGuess = 'bil;';
+  wordToGuess = 'bil';
+  imagePath = 'assets/images/galge.png';
   wrongGuessString = '';
   guessValue = '';
-  getSynligtOrd = '***';
+  getSynligtOrd;
   numOfWrongGuesses = 0;
-  imagePath = 'assets/images/galge.png';
+  guessnum = 1;
 
-  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-    console.log(event);
-  }
+  /*  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+      console.log(event);
+      // window.alert(guessInput.value);
+    }*/
 
-
-  /*@Directive({selector: 'button[counting]'})
-class CountClicks {
-  numberOfClicks = 0;
-
-  @HostListener('click', ['$event.target'])
-  onClick(btn) {
-    console.log('button', btn, 'number of clicks:', this.numberOfClicks++);
- }
-}*/
-
-//    window.alert(guessInput.value);
-
-  constructor() {
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit() {
+    this.fetchWordToGuess();
   }
 
   onClick() {
     if (this.guessValue.length < 1) {
       return;
+    } else if (this.guessValue.length === 1) {
+      this.onGuessLetter(this.guessValue);
+    } else if (this.guessValue.length > 1) {
+      this.onGuessWord(this.guessValue);
     }
-    if (this.wordToGuess.includes(this.guessValue)) {
-      this.opdaterSynligtOrd(this.guessValue);
+    // Når der gættes forkert
+    if (this.wrongGuessString.length < 1) {
+      this.wrongGuessString = this.guessValue;
     } else {
-      // Når der gættes forkert
-      this.numOfWrongGuesses++;
-      this.newWrongGuess();
-      if (this.wrongGuessString.length < 1) {
-        this.wrongGuessString = this.guessValue;
-      } else {
-        this.wrongGuessString = this.wrongGuessString + ', ' + this.guessValue;
-      }
+      this.wrongGuessString = this.wrongGuessString + ', ' + this.guessValue;
     }
     this.guessValue = '';
+    this.guessnum++;
   }
 
-  // Skal slettes/rettes
-  private opdaterSynligtOrd(guessValue: string) {
-    const wordArray: string [] = [];
-    const words = this.wordToGuess.split('');
+  onGuessWord(content: string) {
+    this.http
+      .put(
+        'https://ng-prjct.firebaseio.com/puts.json',
+        JSON.stringify(content))
+      .subscribe(responseData => {
+        console.log(responseData);
+      });
+  }
 
-    /*
-        for (const row of this.wordToGuess) {
-          if (row.includes(guessValue)) {
+  onGuessLetter(content: string) {
+    this.http
+      .put(
+        'https://ng-prjct.firebaseio.com/puts.json',
+        JSON.stringify(this.guessValue))
+      .subscribe(responseData => {
+        console.log(responseData);
+      });
+  }
 
-
-            break;
-          }
-        }*/
-
-
-    /*
-        for (let row of this.rows) {
-          if (!row.selected) {
-            this.selectAllChecked = false;
-            break;
-          }
-        }*/
-
-
-    // this.selectAllChecked = this.rows.every(row => row.selected);
-
-    let i = 0;
-    words.forEach((element) => {
-      if (!this.wordToGuess.charAt(i).includes(element)) {
-        return;
+  private fetchWordToGuess() {
+    this.http.get('http://localhost:7132/galgeleg/1', {
+      responseType: 'text'
+    })
+      .pipe(
+        map((responseData => {
+          return responseData;
+        }))).subscribe(word => {
+        this.wordToGuess = word;
+        this.getSynligtOrd = word;
+        console.log(word);
       }
-      i++;
-    });
-    this.getSynligtOrd = 'bil';
-    window.alert('Du har vundet!');
-    return;
-    /*if (this.guessValue === this.wordToGuess) {
-      window.alert('Du har vundet!');
-    }*/
-    if (guessValue === 'b') {
-      this.getSynligtOrd = guessValue + this.getSynligtOrd.charAt(1) + this.getSynligtOrd.charAt(2);
-    } else if (guessValue === 'i') {
-      this.getSynligtOrd = this.getSynligtOrd.charAt(0) + guessValue + this.getSynligtOrd.charAt(2);
-    } else {
-      this.getSynligtOrd = this.getSynligtOrd.charAt(0) + this.getSynligtOrd.charAt(1) + guessValue;
-    }
-    if (!this.getSynligtOrd.includes('*')) {
-      window.alert('Tillykke! \n\n Du har vundet!');
-    }
+    );
   }
 
-  // Opdaterer billedet
+  onFetchPosts() {
+    this.fetchWordToGuess();
+  }
+
+// Opdatererbilledet
   newWrongGuess() {
     switch (this.numOfWrongGuesses) {
       case 0: {
         this.imagePath = 'assets/images/galge.png';
         break;
       }
+
       case 1: {
         this.imagePath = 'assets/images/forkert1.png';
         break;
       }
+
       case 2: {
         this.imagePath = 'assets/images/forkert2.png';
         break;
       }
+
       case 3: {
         this.imagePath = 'assets/images/forkert3.png';
         break;
@@ -130,7 +111,7 @@ class CountClicks {
         this.imagePath = 'assets/images/forkert4.png';
         break;
       }
-      case 5: {
+      case      5: {
         this.imagePath = 'assets/images/forkert5.png';
         break;
       }
@@ -138,16 +119,23 @@ class CountClicks {
         this.imagePath = 'assets/images/forkert6.png';
         break;
       }
-      /*
-            case 7: {
-              window.alert('Game over, tough guy!');
-              break;
-            }
-      */
       default: {
-        window.alert('Game over, tough guy!');
+        window.alert('Gameover,toughguy!');
         break;
       }
     }
   }
 }
+
+/*  onCreatePost(postData: { title: string; content: string }) {
+    this.http
+      .post(
+        'https://ng-prjct.firebaseio.com/posts.json',
+        postData
+      )
+      .subscribe(responseData => {
+        console.log((responseData));
+        console.log(responseData);
+      });
+  }
+*/

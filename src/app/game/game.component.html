@@ -11,42 +11,38 @@
 
 <legend>{{getSynligtOrd}}</legend>
 <div class="form-group">
-  <label class="col-md-4 control-label" for="height"></label>
   <div class="col-md-4">
-
-    <input id="height"
-           name="textinput"
+    <input id="content"
+           name="content"
            type="text"
            placeholder="Indtast gæt"
+           required
            class="form-control input-md"
            appAutodir
            (keydown.enter)="onClick()"
            [(ngModel)]="guessValue"
            [style.width.px]=120
     >
+
   </div>
+
+  <div class="form-group">
+    <div class="col-md-4">
+      <button id="singlebutton"
+              name="singlebutton"
+              class="btn btn-primary"
+              (click)="onClick()">Gæt!
+      </button>
+    </div>
+  </div>
+
+  <h3>Gættet på: </h3>
+  {{wrongGuessString}}
 </div>
 
-<div class="form-group">
-  <div class="col-md-4">
-    <button id="singlebutton"
-            name="singlebutton"
-            class="btn btn-primary"
-            (click)="onClick()">Gæt!
-    </button>
+<div class="row">
+  <div class="col-xs-12">
+    <a routerLink="">Home</a>
   </div>
 </div>
-
-<h3>Gættet på: </h3>
-{{wrongGuessString}}
-
-<!--
-<tr *ngFor="let guess of allGuesses">
-  <td>{{guess}}</td>
-</tr>
--->
-
-
-
-
 
