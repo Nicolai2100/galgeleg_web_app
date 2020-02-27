@@ -8,8 +8,13 @@ import { Component, OnInit } from '@angular/core';
 export class HeaderComponent implements OnInit {
 
   constructor() { }
+  collapsed = true;
+  // @Output() headerClicked = new EventEmitter<string>();
 
   ngOnInit() {
   }
 
+  onHeaderClicked(name: string) {
+    // this.headerClicked.emit(name);
+  }
 }
