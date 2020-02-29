@@ -1,6 +1,9 @@
 import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
+import {DataholderService} from '../dataholder.service';
+import {GameModel} from './game.model';
+import {kebabToCamelCase} from 'codelyzer/util/utils';
 
 @Component({
   selector: 'app-game',
@@ -15,17 +18,22 @@ export class GameComponent implements OnInit {
   getSynligtOrd;
   numOfWrongGuesses = 0;
   guessnum = 1;
+  dataValue: GameModel;
+  dataReceived: GameModel;
+
 
   /*  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
       console.log(event);
       // window.alert(guessInput.value);
     }*/
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private dataService: DataholderService) {
   }
 
   ngOnInit() {
-    this.fetchWordToGuess();
+    // this.fetchWordToGuess();
+    this.fetchGameData();
+    this.dataValue = this.dataService.getResponseJSON;
   }
 
   onClick() {
@@ -56,38 +64,109 @@ export class GameComponent implements OnInit {
       });
   }
 
-  onGuessLetter(content: string) {
+  /*onGuessLetter(content: string) {
     this.http
       .put(
         'https://ng-prjct.firebaseio.com/puts.json',
+    JSON.stringify(this.guessValue))
+      .subscribe(responseData => {
+        console.log(responseData);
+      });
+  }
+*/
+
+
+  onPostModel() {
+    this.http
+      .post(
+        'https://ng-prjct.firebaseio.com/galgeleg/1.json',
+        this.dataValue)
+      .subscribe(responseData => {
+        console.log(responseData);
+      });
+  }
+
+
+  onGuessLetter(content: string) {
+    this.http
+      .put(
+        'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/galgeleg/1',
         JSON.stringify(this.guessValue))
       .subscribe(responseData => {
         console.log(responseData);
       });
   }
 
-  private fetchWordToGuess() {
-    this.http.get('http://localhost:7132/galgeleg/1', {
-      responseType: 'text'
-    })
+
+  private fetchGameData() {
+    this.http.get<{ [key: string]: GameModel }>(
+      'https://ng-prjct.firebaseio.com/galgeleg/1.json',
+      {
+        responseType: 'json'
+      })
       .pipe(
         map((responseData => {
-          return responseData;
-        }))).subscribe(word => {
-        this.wordToGuess = word;
-        this.getSynligtOrd = word;
-        console.log(word);
+          const gameDataArray: GameModel[] = [];
+          for (const key in responseData) {
+            if (responseData.hasOwnProperty(key)) {
+              gameDataArray.push({...responseData[key], id: key});
+            }
+          }
+          return gameDataArray;
+        }))).subscribe(gameData => {
+        const topData = gameData.pop();
+        this.onGameDataFetched(topData);
+        return topData;
       }
     );
   }
 
+  onGameDataFetched(gameData: GameModel) {
+    this.newWrongGuess(Number.parseInt(gameData.liv, 10));
+//    this.newWrongGuess(Number.parseInt(gameData.liv));
+  }
+
+
+  /*
+    private fetchWordToGuess() {
+      this.http.get('http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/galgeleg/1?callback=foo', {
+        responseType: 'json'
+      })
+        .pipe(
+          map((responseData => {
+            console.log(responseData);
+            return responseData;
+          }))).subscribe(word => {
+          // this.wordToGuess = word;
+          // this.getSynligtOrd = word;
+          console.log(word);
+        }
+      );
+    }*/
+
+  /*
+    private fetchWordToGuess() {
+      this.http.get('http://localhost:7132/galgeleg/1', {
+        responseType: 'text'
+      })
+        .pipe(
+          map((responseData => {
+            return responseData;
+          }))).subscribe(word => {
+          this.wordToGuess = word;
+          this.getSynligtOrd = word;
+          console.log(word);
+        }
+      );
+    }*/
+
   onFetchPosts() {
-    this.fetchWordToGuess();
+    this.fetchGameData();
   }
 
 // Opdatererbilledet
-  newWrongGuess() {
-    switch (this.numOfWrongGuesses) {
+  newWrongGuess(numOfWrongs: number) {
+    switch (numOfWrongs) {
       case 0: {
         this.imagePath = 'assets/images/galge.png';
         break;
