@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {GameModel} from './game/game.model';
+import {GameInterface} from './game/game.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ export class DataholderService {
   constructor() {
   }
 
-  getResponseJSON: GameModel =
+  getResponseJSON: GameInterface =
     {
       synligtOrd: 'computer',
       liv: '5',

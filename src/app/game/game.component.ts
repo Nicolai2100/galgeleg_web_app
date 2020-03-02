@@ -2,6 +2,7 @@ import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/c
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
 import {DataholderService} from '../dataholder.service';
+import {GameInterface} from './game.interface';
 import {GameModel} from './game.model';
 import {kebabToCamelCase} from 'codelyzer/util/utils';
 
@@ -18,20 +19,20 @@ export class GameComponent implements OnInit {
   getSynligtOrd;
   numOfWrongGuesses = 0;
   guessnum = 1;
-  dataValue: GameModel;
-  dataReceived: GameModel;
+  dataValue: GameInterface;
+  dataReceived: GameInterface;
 
 
   /*  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
       console.log(event);
       // window.alert(guessInput.value);
     }*/
+  private gameData: GameModel;
 
   constructor(private http: HttpClient, private dataService: DataholderService) {
   }
 
   ngOnInit() {
-    // this.fetchWordToGuess();
     this.fetchGameData();
     this.dataValue = this.dataService.getResponseJSON;
   }
@@ -54,6 +55,39 @@ export class GameComponent implements OnInit {
     this.guessnum++;
   }
 
+  private fetchGameData() {
+    this.http.get<GameModel>(
+      'api/com.galgeleg.webapp/galgeleg/1')
+      .pipe(
+        map(responseData => {
+          const responseObj: GameModel = {...responseData};
+          return responseObj;
+        })).subscribe(gameData => {
+        console.log(gameData.synligtOrd.valueOf());
+        // this.onGameDataFetched(gameData.liv.valueOf());
+        this.getSynligtOrd = JSON.stringify(gameData.synligtOrd);
+      }
+    );
+  }
+
+  /* private fetchGameData() {
+     fetch(
+       'api/com.galgeleg.webapp/galgeleg/1')
+       .then(response => response.json())
+       .then(json => console.log(json));
+   }
+ */
+
+
+  /*  private fetchGameData() {
+      this.http.get(
+        'api/com.galgeleg.webapp/galgeleg/1')
+        .subscribe(resp => {
+          // access the body directly, which is typed as `Config`.
+          this.gameData = {...resp};
+        });
+    }*/
+
   onGuessWord(content: string) {
     this.http
       .put(
@@ -64,22 +98,11 @@ export class GameComponent implements OnInit {
       });
   }
 
-  /*onGuessLetter(content: string) {
-    this.http
-      .put(
-        'https://ng-prjct.firebaseio.com/puts.json',
-    JSON.stringify(this.guessValue))
-      .subscribe(responseData => {
-        console.log(responseData);
-      });
-  }
-*/
-
 
   onPostModel() {
     this.http
       .post(
-        'https://ng-prjct.firebaseio.com/galgeleg/1.json',
+        'https://ng-prjct.firebaseio.com/galgeleg/1',
         this.dataValue)
       .subscribe(responseData => {
         console.log(responseData);
@@ -90,7 +113,7 @@ export class GameComponent implements OnInit {
   onGuessLetter(content: string) {
     this.http
       .put(
-        'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/galgeleg/1',
+        'api/com.galgeleg.webapp/galgeleg/1',
         JSON.stringify(this.guessValue))
       .subscribe(responseData => {
         console.log(responseData);
@@ -98,15 +121,15 @@ export class GameComponent implements OnInit {
   }
 
 
-  private fetchGameData() {
-    this.http.get<{ [key: string]: GameModel }>(
-      'https://ng-prjct.firebaseio.com/galgeleg/1.json',
+  /* private fetchGameData() {
+    this.http.get<{ [key: string]: GameInterface }>(
+      'api/com.galgeleg.webapp/galgeleg/1',
       {
         responseType: 'json'
       })
       .pipe(
         map((responseData => {
-          const gameDataArray: GameModel[] = [];
+          const gameDataArray: GameInterface[] = [];
           for (const key in responseData) {
             if (responseData.hasOwnProperty(key)) {
               gameDataArray.push({...responseData[key], id: key});
@@ -120,45 +143,12 @@ export class GameComponent implements OnInit {
       }
     );
   }
+*/
 
-  onGameDataFetched(gameData: GameModel) {
-    this.newWrongGuess(Number.parseInt(gameData.liv, 10));
-//    this.newWrongGuess(Number.parseInt(gameData.liv));
+  onGameDataFetched(liv: string) {
+    console.log(Number(liv));
+    this.newWrongGuess(Number.parseInt(liv, 10));
   }
-
-
-  /*
-    private fetchWordToGuess() {
-      this.http.get('http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/galgeleg/1?callback=foo', {
-        responseType: 'json'
-      })
-        .pipe(
-          map((responseData => {
-            console.log(responseData);
-            return responseData;
-          }))).subscribe(word => {
-          // this.wordToGuess = word;
-          // this.getSynligtOrd = word;
-          console.log(word);
-        }
-      );
-    }*/
-
-  /*
-    private fetchWordToGuess() {
-      this.http.get('http://localhost:7132/galgeleg/1', {
-        responseType: 'text'
-      })
-        .pipe(
-          map((responseData => {
-            return responseData;
-          }))).subscribe(word => {
-          this.wordToGuess = word;
-          this.getSynligtOrd = word;
-          console.log(word);
-        }
-      );
-    }*/
 
   onFetchPosts() {
     this.fetchGameData();
@@ -166,7 +156,7 @@ export class GameComponent implements OnInit {
 
 // Opdatererbilledet
   newWrongGuess(numOfWrongs: number) {
-    switch (numOfWrongs) {
+    switch (numOfWrongs - 1) {
       case 0: {
         this.imagePath = 'assets/images/galge.png';
         break;
@@ -190,7 +180,7 @@ export class GameComponent implements OnInit {
         this.imagePath = 'assets/images/forkert4.png';
         break;
       }
-      case      5: {
+      case 5: {
         this.imagePath = 'assets/images/forkert5.png';
         break;
       }
@@ -198,10 +188,10 @@ export class GameComponent implements OnInit {
         this.imagePath = 'assets/images/forkert6.png';
         break;
       }
-      default: {
-        window.alert('Gameover,toughguy!');
-        break;
-      }
+      /*  default: {
+          window.alert('Gameover,toughguy!');
+          break;
+        }*/
     }
   }
 }

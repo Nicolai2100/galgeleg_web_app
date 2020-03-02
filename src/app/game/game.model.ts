@@ -1,6 +1,6 @@
-export interface GameModel {
-  synligtOrd: string;
-  liv: string;
-  spilVundet: boolean;
-  id?: string;
+export class GameModel {
+
+  public constructor(public synligtOrd: string, public liv: string,
+                     public spilVundet: boolean) {
+  }
 }
