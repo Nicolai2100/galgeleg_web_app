@@ -3,13 +3,59 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <img class="img-responsive" src="assets/images/forkert6.png"
+    <img class="img-responsive" src="{{imagePath}}"
          style="max-height: 500px">
 
   </div>
+
+<br>
+Bruger login
+
+<div class="form-group">
+  <div class="col-md-4">
+    <input id="name"
+           name="name"
+           type="text"
+           placeholder="brugernavn"
+           required
+           class="form-control input-md"
+           appAutodir
+           [(ngModel)]="loginName"
+           [style.width.px]=120
+    >
+
+    <input id="password"
+           name="password"
+           type="password"
+           placeholder="kodeord"
+           required
+           class="form-control input-md"
+           [(ngModel)]="loginPassword"
+           (keydown.enter)="onLogin()"
+           [style.width.px]=120
+    >
+
+    <button id="singlebutton"
+            name="singlebutton"
+            class="btn btn-primary"
+            (click)="onLogin()">Log in!
+    </button>
+  </div>
 </div>
-<div class="row">
+
+
+  <br>
+  <br>
+
+  {{welcomeMess}}
+
+</div>
+<div *ngIf="loggedIn" class="row">
   <div class="col-xs-12">
     <a routerLink="/game">Go Play!</a>
   </div>
 </div>
+
+
+
+

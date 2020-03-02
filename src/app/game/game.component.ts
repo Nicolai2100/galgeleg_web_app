@@ -64,11 +64,12 @@ export class GameComponent implements OnInit {
           return responseObj;
         })).subscribe(gameData => {
         console.log(gameData);
-        console.log(gameData.synligtOrd.valueOf());
         // this.onGameDataFetched(gameData.liv.valueOf());
         // this.getSynligtOrd = JSON.stringify(gameData.synligtOrd);
         // @ts-ignore
         this.getSynligtOrd = gameData.synligtOrd.string;
+        // @ts-ignore
+        this.newWrongGuess(Number.parseInt(gameData.liv.string, 10));
       }
     );
   }
