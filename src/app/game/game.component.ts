@@ -56,18 +56,28 @@ export class GameComponent implements OnInit {
   }
 
   private fetchGameData() {
-    this.http.get<GameModel>(
+    interface StringJSON {
+      valueType: string;
+      string: string;
+      chars: string;
+    }
+
+    interface GameDataJSON {
+      synligtOrd: StringJSON;
+      liv: StringJSON;
+      spilVundet: {
+        valueType: string;
+      };
+    }
+
+    this.http.get<GameDataJSON>(
       'api/com.galgeleg.webapp/galgeleg/1')
       .pipe(
         map(responseData => {
-          const responseObj: GameModel = {...responseData};
+          const responseObj: GameDataJSON = {...responseData};
           return responseObj;
         })).subscribe(gameData => {
         console.log(gameData);
-        console.log(gameData.synligtOrd.valueOf());
-        // this.onGameDataFetched(gameData.liv.valueOf());
-        // this.getSynligtOrd = JSON.stringify(gameData.synligtOrd);
-        // @ts-ignore
         this.getSynligtOrd = gameData.synligtOrd.string;
       }
     );
