@@ -63,9 +63,12 @@ export class GameComponent implements OnInit {
           const responseObj: GameModel = {...responseData};
           return responseObj;
         })).subscribe(gameData => {
+        console.log(gameData);
         console.log(gameData.synligtOrd.valueOf());
         // this.onGameDataFetched(gameData.liv.valueOf());
-        this.getSynligtOrd = JSON.stringify(gameData.synligtOrd);
+        // this.getSynligtOrd = JSON.stringify(gameData.synligtOrd);
+        // @ts-ignore
+        this.getSynligtOrd = gameData.synligtOrd.string;
       }
     );
   }
