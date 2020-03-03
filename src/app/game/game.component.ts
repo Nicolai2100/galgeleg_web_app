@@ -70,16 +70,22 @@ export class GameComponent implements OnInit {
       };
     }
 
-    this.http.get<GameDataJSON>(
-      'api/com.galgeleg.webapp/galgeleg/1')
-      .pipe(
-        map(responseData => {
-          const responseObj: GameDataJSON = {...responseData};
-          return responseObj;
-        })).subscribe(gameData => {
-        console.log(gameData);
-        this.getSynligtOrd = gameData.synligtOrd.string;
-      }
+    /*
+        this.http.get<GameDataJSON>(
+          'api/com.galgeleg.webapp/galgeleg/1')
+          .pipe(
+            map(responseData => {
+              const responseObj: GameDataJSON = {...responseData};
+              return responseObj;
+            })).subscribe(gameData => {
+            console.log(gameData);
+            this.getSynligtOrd = gameData.synligtOrd.string;
+          }
+        );*/
+    this.http.post(
+      'http://localhost:8080/galgeleg/s185020/', {}).subscribe(
+      response => console.log(response),
+      err => console.log(err)
     );
   }
 

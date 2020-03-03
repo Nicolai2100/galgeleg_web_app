@@ -27,6 +27,12 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.imagePath = 'assets/images/forkert6.png';
+    this.http
+      .get(
+        'http://localhost:8080/galgeleg/test2').subscribe(
+      response => console.log(response),
+      err => console.log(err)
+    );
   }
 
   onLogin() {
@@ -52,8 +58,9 @@ export class WelcomeComponent implements OnInit {
     console.log('Sending data');
     return this.http
       .post(
-        'api/com.galgeleg.webapp/brugerLogin',
+        'http://localhost:8080/brugerLogin',
         loginModel);
   }
 
 }
+
