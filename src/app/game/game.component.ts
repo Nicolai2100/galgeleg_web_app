@@ -124,6 +124,14 @@ export class GameComponent implements OnInit {
       });
   }
 
+  /*postLogin(loginModel: { brugernavn: string; adgangskode: string }): Observable<any> {
+    console.log('Sending data');
+    return this.http
+      .post(
+        'api/com.galgeleg.webapp/brugerLogin',
+        loginModel);
+  }
+*/
 
   /* private fetchGameData() {
     this.http.get<{ [key: string]: GameInterface }>(

@@ -30,6 +30,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   onLogin() {
+    console.log(this.loginName + this.loginPassword);
     this.postLogin(new LoginModel(this.loginName, this.loginPassword)).subscribe(
       response => this.onLoginSucces(response),
       err => this.onLoginError()
