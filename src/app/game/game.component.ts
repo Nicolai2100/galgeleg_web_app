@@ -56,20 +56,29 @@ export class GameComponent implements OnInit {
   }
 
   private fetchGameData() {
-    this.http.get<GameModel>(
+    interface StringJSON {
+      valueType: string;
+      string: string;
+      chars: string;
+    }
+
+    interface GameDataJSON {
+      synligtOrd: StringJSON;
+      liv: StringJSON;
+      spilVundet: {
+        valueType: string;
+      };
+    }
+
+    this.http.get<GameDataJSON>(
       'api/com.galgeleg.webapp/galgeleg/1')
       .pipe(
         map(responseData => {
-          const responseObj: GameModel = {...responseData};
+          const responseObj: GameDataJSON = {...responseData};
           return responseObj;
         })).subscribe(gameData => {
         console.log(gameData);
-        // this.onGameDataFetched(gameData.liv.valueOf());
-        // this.getSynligtOrd = JSON.stringify(gameData.synligtOrd);
-        // @ts-ignore
         this.getSynligtOrd = gameData.synligtOrd.string;
-        // @ts-ignore
-        this.newWrongGuess(Number.parseInt(gameData.liv.string, 10));
       }
     );
   }
@@ -124,14 +133,6 @@ export class GameComponent implements OnInit {
       });
   }
 
-  /*postLogin(loginModel: { brugernavn: string; adgangskode: string }): Observable<any> {
-    console.log('Sending data');
-    return this.http
-      .post(
-        'api/com.galgeleg.webapp/brugerLogin',
-        loginModel);
-  }
-*/
 
   /* private fetchGameData() {
     this.http.get<{ [key: string]: GameInterface }>(
