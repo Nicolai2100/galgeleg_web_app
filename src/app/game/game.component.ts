@@ -35,7 +35,6 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     this.fetchGameData();
     this.dataValue = this.dataService.getResponseJSON;
-    this.postGalge();
   }
 
   onClick() {
