@@ -35,6 +35,7 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     this.fetchGameData();
     this.dataValue = this.dataService.getResponseJSON;
+    this.postGalge();
   }
 
   onClick() {
@@ -55,6 +56,17 @@ export class GameComponent implements OnInit {
     this.guessnum++;
   }
 
+  private postGalge() {
+    console.log('posting game');
+    this.http
+      .post(
+        'http://localhost:8080/galgeleg/s185020', {})
+      .subscribe(
+        response => console.log(response),
+        err => console.log(err)
+      );
+  }
+
   private fetchGameData() {
     interface StringJSON {
       valueType: string;
@@ -70,6 +82,13 @@ export class GameComponent implements OnInit {
       };
     }
 
+    this.http.post(
+      'http://localhost:8080/galgeleg/s185020/', {}).subscribe(
+      response => console.log(response),
+      err => console.log(err)
+    );
+
+
     /*
         this.http.get<GameDataJSON>(
           'api/com.galgeleg.webapp/galgeleg/1')
@@ -82,11 +101,17 @@ export class GameComponent implements OnInit {
             this.getSynligtOrd = gameData.synligtOrd.string;
           }
         );*/
-    this.http.post(
-      'http://localhost:8080/galgeleg/s185020/', {}).subscribe(
-      response => console.log(response),
-      err => console.log(err)
-    );
+  }
+
+
+  onGuessLetter(content: string) {
+    this.http
+      .put(
+        'http://localhost:8080/galgeleg/s185020/' + content,
+        JSON.stringify(this.guessValue))
+      .subscribe(
+        response => console.log(response),
+        err => console.log(err));
   }
 
   /* private fetchGameData() {
@@ -123,17 +148,6 @@ export class GameComponent implements OnInit {
       .post(
         'https://ng-prjct.firebaseio.com/galgeleg/1',
         this.dataValue)
-      .subscribe(responseData => {
-        console.log(responseData);
-      });
-  }
-
-
-  onGuessLetter(content: string) {
-    this.http
-      .put(
-        'api/com.galgeleg.webapp/galgeleg/1',
-        JSON.stringify(this.guessValue))
       .subscribe(responseData => {
         console.log(responseData);
       });

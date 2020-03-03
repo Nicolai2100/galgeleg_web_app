@@ -6,6 +6,7 @@ import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {UserModel} from '../user.model';
 import {ResponseInterface} from './response.interface';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-welcome',
@@ -16,13 +17,13 @@ export class WelcomeComponent implements OnInit {
   loggedIn = false;
   loginName: string;
   loginPassword: string;
-  // loginInfo: LoginModel = new LoginModel('s185020', 'njl_nykode');
-  loginInfo: LoginModel;
+  loginInfo: LoginModel = new LoginModel('s185020', 'njl_nykode');
+  // loginInfo: LoginModel;
   user: UserModel;
   imagePath: string;
   welcomeMess: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   ngOnInit() {
@@ -35,12 +36,34 @@ export class WelcomeComponent implements OnInit {
     );
   }
 
+  /*
+    onLogin() {
+      console.log(this.loginName + this.loginPassword);
+      this.postLogin(new LoginModel(this.loginName, this.loginPassword)).subscribe(
+        response => this.onLoginSucces(response),
+        err => this.onLoginError()
+      );
+    }
+  */
+
   onLogin() {
-    console.log(this.loginName + this.loginPassword);
-    this.postLogin(new LoginModel(this.loginName, this.loginPassword)).subscribe(
-      response => this.onLoginSucces(response),
-      err => this.onLoginError()
-    );
+    // todo slet console.log(this.loginName + this.loginPassword);
+    this.postLogin(this.loginInfo)
+      .subscribe(
+        response => this.onLoginSucces(response),
+        err => {
+          console.log(err);
+          this.onLoginError();
+        }
+      );
+  }
+
+  postLogin(loginModel: { brugernavn: string; adgangskode: string }): Observable<any> {
+    console.log('Sending data');
+    return this.http
+      .post(
+        'http://localhost:8080/brugerLogin',
+        loginModel);
   }
 
   private onLoginError() {
@@ -51,16 +74,24 @@ export class WelcomeComponent implements OnInit {
     console.log(response);
     this.user = new UserModel(response.brugernavn, response.email, response.fornavn, response.efternavn, response.ekstraFelter.webside);
     this.loggedIn = true;
-    this.welcomeMess = 'Velkommen til Galgeleg' + this.user.fornavn + '. Klik herunder for at starte spillet';
+    this.router.navigate(['/game', { }]);
   }
 
-  postLogin(loginModel: { brugernavn: string; adgangskode: string }): Observable<any> {
-    console.log('Sending data');
-    return this.http
-      .post(
-        'http://localhost:8080/brugerLogin',
-        loginModel);
-  }
+
+  /* private postGalge() {
+     console.log('posting game');
+     return this.http
+       .post(
+         'api/com.galgeleg.webapp/galgeleg/s185020',
+         {brugernavn: this.loginInfo.brugernavn})
+       .subscribe(
+         response => console.log(response),
+         err => console.log(err)
+       );
+
+ //         'http://localhost:8080/galgeleg/xxx/s185020', {})
+
+   }*/
 
 }
 
