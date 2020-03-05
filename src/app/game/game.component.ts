@@ -9,6 +9,10 @@ import {Game2Interface} from '../shared/game2.interface';
 import {Router} from '@angular/router';
 import {LoginModel} from '../welcome/login.model';
 
+class BogstavModel {
+  Bogstav: string;
+}
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -24,7 +28,7 @@ export class GameComponent implements OnInit {
   guessnum = 1;
   dataValue: GameInterface;
   dataReceived: GameInterface;
-  bogstav: string;
+  bogstav: BogstavModel;
 
 
   /*  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
@@ -45,7 +49,9 @@ export class GameComponent implements OnInit {
     if (this.guessValue.length < 1) {
       return;
     } else if (this.guessValue.length === 1) {
-      this.onGuessLetter(this.guessValue);
+      const bm = new BogstavModel();
+      bm.Bogstav = this.guessValue;
+      this.onGuessLetter(bm);
     } else if (this.guessValue.length > 1) {
       // this.onGuessWord(this.guessValue);
     }
@@ -78,11 +84,11 @@ export class GameComponent implements OnInit {
 
   }
 
-  onGuessLetter(bogstav: string) {
+  onGuessLetter(bogstav: BogstavModel) {
     this.http
-      .post(
-        'local/galgeleg/s185020/e',
-       {})
+      .put(
+        'local/galgeleg/s185020',
+        bogstav)
       .subscribe(
         response => console.log(response),
         err => console.log(err));
