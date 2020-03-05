@@ -9,7 +9,7 @@
   </div>
 </div>
 
-<legend>{{getSynligtOrd}}</legend>
+<legend>{{synligtOrd}}</legend>
 <div class="form-group">
   <div class="col-md-4">
     <input id="content"
@@ -19,6 +19,7 @@
            required
            class="form-control input-md"
            appAutodir
+           autocomplete="off"
            (keydown.enter)="onClick()"
            [(ngModel)]="guessValue"
            [style.width.px]=120

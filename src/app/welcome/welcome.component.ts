@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {log} from 'util';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {UserModel} from '../user.model';
+import {UserModel} from '../shared/user.model';
 import {ResponseInterface} from './response.interface';
 import {Router} from '@angular/router';
 
@@ -30,7 +30,7 @@ export class WelcomeComponent implements OnInit {
     this.imagePath = 'assets/images/forkert6.png';
     this.http
       .get(
-        'http://localhost:8080/galgeleg/test2').subscribe(
+        '/api/com.galgeleg.webapp/galgeleg/test2').subscribe(
       response => console.log(response),
       err => console.log(err)
     );
@@ -62,7 +62,7 @@ export class WelcomeComponent implements OnInit {
     console.log('Sending data');
     return this.http
       .post(
-        'http://localhost:8080/brugerLogin',
+        '/api/com.galgeleg.webapp/brugerLogin',
         loginModel);
   }
 

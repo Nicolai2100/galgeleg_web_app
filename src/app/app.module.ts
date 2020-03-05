@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {GameComponent} from './game/game.component';
 import {FormsModule} from '@angular/forms';
-import {AutodirDirective} from './autodir.directive';
+import {AutodirDirective} from './shared/autodir.directive';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule, Routes} from '@angular/router';
 import { WelcomeComponent } from './welcome/welcome.component';
