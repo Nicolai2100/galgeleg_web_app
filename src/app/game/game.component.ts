@@ -9,7 +9,7 @@ import {Game2Interface} from '../shared/game2.interface';
 import {Router} from '@angular/router';
 import {LoginModel} from '../welcome/login.model';
 
-class BogstavModel {
+interface BogstavModel {
   Bogstav: string;
 }
 
@@ -49,9 +49,9 @@ export class GameComponent implements OnInit {
     if (this.guessValue.length < 1) {
       return;
     } else if (this.guessValue.length === 1) {
-      const bm = new BogstavModel();
-      bm.Bogstav = this.guessValue;
-      this.onGuessLetter(bm);
+      // const bm = new BogstavModel();
+      // bm.Bogstav = this.guessValue;
+      this.onGuessLetter(this.guessValue);
     } else if (this.guessValue.length > 1) {
       // this.onGuessWord(this.guessValue);
     }
@@ -67,15 +67,15 @@ export class GameComponent implements OnInit {
 
   private fetchStartGameData() {
     this.http.post<Game2Interface>(
-      'local/galgeleg/s185020/', {}).subscribe(
-      response => this.onPostResponce(response),
+      '/local/galgeleg/s185020', {}).subscribe(
+      response => this.onPostResponse(response),
       err => console.log(err)
     );
   }
 
-  private onPostResponce(response: Game2Interface) {
+  private onPostResponse(response: Game2Interface) {
     console.log(response);
-    if (!response.spilletErSlut) {
+    if (response.spilletErSlut) {
       this.router.navigate(['/highscore', {}]);
     } else {
       this.newWrongGuess(response.antalForkerteBogstaver);
@@ -84,13 +84,12 @@ export class GameComponent implements OnInit {
 
   }
 
-  onGuessLetter(bogstav: BogstavModel) {
+  onGuessLetter(bogstav: string) {
     this.http
-      .put(
-        'local/galgeleg/s185020',
-        bogstav)
+      .get(
+        '/local/galgeleg/s185020/' + bogstav)
       .subscribe(
-        response => console.log(response),
+        response => this.updateGameData(response),
         err => console.log(err));
   }
 
@@ -101,6 +100,12 @@ export class GameComponent implements OnInit {
 
   onFetchPosts() {
     this.fetchStartGameData();
+  }
+// Opdater al data
+  updateGameData(data: any) {
+    // this.wrongGuessString = data.brugteBogstaver;
+    this.synligtOrd = data.synligtOrd;
+    console.log(data);
   }
 
 // Opdatererbilledet
