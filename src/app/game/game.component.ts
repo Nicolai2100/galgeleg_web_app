@@ -1,13 +1,9 @@
-import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, tap} from 'rxjs/operators';
 import {DataholderService} from '../shared/dataholder.service';
 import {GameInterface} from '../shared/game.interface';
 import {GameModel} from '../shared/game.model';
-import {kebabToCamelCase} from 'codelyzer/util/utils';
-import {Game2Interface} from '../shared/game2.interface';
 import {Router} from '@angular/router';
-import {LoginModel} from '../welcome/login.model';
 
 interface BogstavModel {
   Bogstav: string;
@@ -21,94 +17,57 @@ interface BogstavModel {
 export class GameComponent implements OnInit {
   // path = '/api/com.galgeleg.webapp/rest';
   path = 'http://localhost:8080/rest';
-
   imagePath = 'assets/images/galge.png';
   wrongGuessString = '';
   guessValue = '';
   synligtOrd;
-  numOfWrongGuesses = 0;
   guessnum = 1;
-  dataValue: GameInterface;
-  dataReceived: GameInterface;
-  bogstav: BogstavModel;
-
-
-  /*  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-      console.log(event);
-      // window.alert(guessInput.value);
-    }*/
-  private gameData: GameModel;
 
   constructor(private http: HttpClient, private dataService: DataholderService, private router: Router) {
   }
 
   ngOnInit() {
     this.fetchStartGameData();
-    this.dataValue = this.dataService.getResponseJSON;
   }
 
   onClick() {
     if (this.guessValue.length < 1) {
       return;
     } else if (this.guessValue.length === 1) {
-      // const bm = new BogstavModel();
-      // bm.Bogstav = this.guessValue;
       this.onGuessLetter(this.guessValue);
     } else if (this.guessValue.length > 1) {
-      // this.onGuessWord(this.guessValue);
-    }
-    // Når der gættes forkert
-    if (this.wrongGuessString.length < 1) {
-      this.wrongGuessString = this.guessValue;
-    } else {
-      this.wrongGuessString = this.wrongGuessString + ', ' + this.guessValue;
     }
     this.guessValue = '';
     this.guessnum++;
   }
 
   private fetchStartGameData() {
-    this.http.post<Game2Interface>(
-      'http://localhost:8080/rest/galgeleg/s185020', {}).subscribe(
-      response => this.onPostResponse(response),
+    this.http.post<GameInterface>(
+      this.path + '/galgeleg/s185020', {}).subscribe(
+      response => this.onResponse(response),
       err => console.log(err)
     );
   }
 
-  private onPostResponse(response: Game2Interface) {
+  // Opdaterer al data
+  private onResponse(response: GameInterface) {
     console.log(response);
-    if (response.spilletErSlut) {
+    if (response.erSpilletSlut[0]) {
       this.router.navigate(['/highscore', {}]);
     } else {
-      this.newWrongGuess(response.antalForkerteBogstaver);
       this.synligtOrd = response.synligtOrd;
+      this.newWrongGuess(response.antalForkerteBogstaver[0]);
+      this.wrongGuessString = response.brugteBogstaver.toString();
     }
-
   }
 
   onGuessLetter(bogstav: string) {
     this.http
-      .get(
-        'http://localhost:8080/rest/galgeleg/s185020/' + bogstav)
+      .get<GameInterface>(
+        this.path + '/galgeleg/s185020/' + bogstav)
       .subscribe(
-        response => this.updateGameData(response),
+        response => this.onResponse(response),
         err => console.log(err));
-  }
-
-  onGameDataFetched(liv: string) {
-    console.log(Number(liv));
-    this.newWrongGuess(Number.parseInt(liv, 10));
-  }
-
-  onFetchPosts() {
-    this.fetchStartGameData();
-  }
-
-// Opdater al data
-  updateGameData(data: any) {
-    // this.wrongGuessString = data.brugteBogstaver;
-    this.synligtOrd = data.synligtOrd;
-    console.log(data);
   }
 
 // Opdatererbilledet
@@ -149,31 +108,3 @@ export class GameComponent implements OnInit {
     }
   }
 }
-
-/*onGuessLetter(content: string) {
-  this.http
-    .put(
-      'api/galgeleg/s185020/' + content,
-      JSON.stringify(this.guessValue))
-    .subscribe(
-      response => console.log(response),
-      err => console.log(err));
-}*/
-
-/* private fetchGameData() {
-   fetch(
-     'api/com.galgeleg.webapp/galgeleg/1')
-     .then(response => response.json())
-     .then(json => console.log(json));
- }
-*/
-
-
-/*  private fetchGameData() {
-    this.http.get(
-      'api/com.galgeleg.webapp/galgeleg/1')
-      .subscribe(resp => {
-        // access the body directly, which is typed as `Config`.
-        this.gameData = {...resp};
-      });
-  }*/

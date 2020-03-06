@@ -1,6 +1,11 @@
 export interface GameInterface {
+  erSpilletTabt: boolean;
+  brugteBogstaver: [];
+  antalForkerteBogstaver: number;
+  erSidsteBogstavKorrekt: boolean;
+  spilletErTabt: boolean;
   synligtOrd: string;
-  liv: string;
-  spilVundet: boolean;
-  id?: string;
+  erSpilletVundet: boolean;
+  erSpilletSlut: boolean;
+
 }
