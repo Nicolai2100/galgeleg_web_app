@@ -12,6 +12,7 @@ import {UserModel} from '../shared/user.model';
 export class HighscoreComponent implements OnInit {
   game: GameModel;
   user: UserModel;
+  str: string;
 
   constructor(private gameDataService: GamedataService,
               private userDataService: UserdataService) {
@@ -21,7 +22,10 @@ export class HighscoreComponent implements OnInit {
     this.game = this.gameDataService.game;
     this.user = this.userDataService.user;
     if (this.game.spilVundet) {
-      alert('Tillykke' + this.user.fornavn);
+      this.str = 'Tillykke ' + this.user.fornavn + '! Du har vundet!';
+    } else {
+      this.str = 'Trist ' + this.user.fornavn + '... Du har tabt!';
+
     }
   }
 

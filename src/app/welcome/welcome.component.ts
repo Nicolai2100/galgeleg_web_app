@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {LoginModel} from './login.model';
+import {LoginModel} from '../shared/login.model';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {UserModel} from '../shared/user.model';

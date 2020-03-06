@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {DataholderService} from '../shared/dataholder.service';
 import {GameInterface} from '../shared/game.interface';
 import {GameModel} from '../shared/game.model';
 import {Router} from '@angular/router';
@@ -18,8 +17,8 @@ interface BogstavModel {
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
-  // path = '/api/com.galgeleg.webapp/rest';
-  path = 'http://localhost:8080/rest';
+  path = '/api/com.galgeleg.webapp/rest';
+  // path = 'http://localhost:8080/rest';
   user: UserModel;
   imagePath = 'assets/images/galge.png';
   wrongGuessString = '';
@@ -28,7 +27,6 @@ export class GameComponent implements OnInit {
   guessnum = 1;
 
   constructor(private http: HttpClient,
-              private dataService: DataholderService,
               private router: Router,
               private userDataService: UserdataService,
               private gameDataService: GamedataService) {
