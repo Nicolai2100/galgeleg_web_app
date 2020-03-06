@@ -6,6 +6,7 @@ import {UserModel} from '../shared/user.model';
 import {ResponseInterface} from './response.interface';
 import {Router} from '@angular/router';
 import {log} from 'util';
+import {UserdataService} from '../shared/userdata.service';
 
 @Component({
   selector: 'app-welcome',
@@ -22,7 +23,7 @@ export class WelcomeComponent implements OnInit {
   imagePath: string;
   welcomeMess: string;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private userDataService: UserdataService) {
   }
 
   ngOnInit() {
@@ -56,6 +57,7 @@ export class WelcomeComponent implements OnInit {
   private onLoginSucces(response: ResponseInterface) {
     this.user = new UserModel(response.brugernavn, response.email, response.fornavn, response.efternavn, response.ekstraFelter.webside);
     this.loggedIn = true;
+    this.userDataService.addUser(this.user);
     this.router.navigate(['/game', {}]);
   }
 }

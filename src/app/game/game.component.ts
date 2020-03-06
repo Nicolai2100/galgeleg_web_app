@@ -4,6 +4,9 @@ import {DataholderService} from '../shared/dataholder.service';
 import {GameInterface} from '../shared/game.interface';
 import {GameModel} from '../shared/game.model';
 import {Router} from '@angular/router';
+import {UserdataService} from '../shared/userdata.service';
+import {UserModel} from '../shared/user.model';
+import {GamedataService} from '../shared/gamedata.service';
 
 interface BogstavModel {
   Bogstav: string;
@@ -17,16 +20,22 @@ interface BogstavModel {
 export class GameComponent implements OnInit {
   // path = '/api/com.galgeleg.webapp/rest';
   path = 'http://localhost:8080/rest';
+  user: UserModel;
   imagePath = 'assets/images/galge.png';
   wrongGuessString = '';
   guessValue = '';
   synligtOrd;
   guessnum = 1;
 
-  constructor(private http: HttpClient, private dataService: DataholderService, private router: Router) {
+  constructor(private http: HttpClient,
+              private dataService: DataholderService,
+              private router: Router,
+              private userDataService: UserdataService,
+              private gameDataService: GamedataService) {
   }
 
   ngOnInit() {
+    this.user = this.userDataService.user;
     this.fetchStartGameData();
   }
 
@@ -43,16 +52,19 @@ export class GameComponent implements OnInit {
 
   private fetchStartGameData() {
     this.http.post<GameInterface>(
-      this.path + '/galgeleg/s185020', {}).subscribe(
-      response => this.onResponse(response),
-      err => console.log(err)
-    );
+      this.path + '/galgeleg/' + this.user.brugernavn, {})
+      .subscribe(
+        response => this.onResponse(response),
+        err => console.log(err));
   }
 
   // Opdaterer al data
   private onResponse(response: GameInterface) {
     console.log(response);
     if (response.erSpilletSlut[0]) {
+      this.gameDataService.addGame(new GameModel(response.synligtOrd,
+        response.antalForkerteBogstaver[0],
+        response.erSpilletVundet[0]));
       this.router.navigate(['/highscore', {}]);
     } else {
       this.synligtOrd = response.synligtOrd;
