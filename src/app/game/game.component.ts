@@ -19,7 +19,9 @@ interface BogstavModel {
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
-  wordToGuess = 'bil';
+  // path = '/api/com.galgeleg.webapp/rest';
+  path = 'http://localhost:8080/rest';
+
   imagePath = 'assets/images/galge.png';
   wrongGuessString = '';
   guessValue = '';
@@ -67,7 +69,7 @@ export class GameComponent implements OnInit {
 
   private fetchStartGameData() {
     this.http.post<Game2Interface>(
-      '/local/galgeleg/s185020', {}).subscribe(
+      'http://localhost:8080/rest/galgeleg/s185020', {}).subscribe(
       response => this.onPostResponse(response),
       err => console.log(err)
     );
@@ -87,7 +89,7 @@ export class GameComponent implements OnInit {
   onGuessLetter(bogstav: string) {
     this.http
       .get(
-        '/local/galgeleg/s185020/' + bogstav)
+        'http://localhost:8080/rest/galgeleg/s185020/' + bogstav)
       .subscribe(
         response => this.updateGameData(response),
         err => console.log(err));
@@ -101,6 +103,7 @@ export class GameComponent implements OnInit {
   onFetchPosts() {
     this.fetchStartGameData();
   }
+
 // Opdater al data
   updateGameData(data: any) {
     // this.wrongGuessString = data.brugteBogstaver;
@@ -115,17 +118,14 @@ export class GameComponent implements OnInit {
         this.imagePath = 'assets/images/galge.png';
         break;
       }
-
       case 1: {
         this.imagePath = 'assets/images/forkert1.png';
         break;
       }
-
       case 2: {
         this.imagePath = 'assets/images/forkert2.png';
         break;
       }
-
       case 3: {
         this.imagePath = 'assets/images/forkert3.png';
         break;

@@ -14,6 +14,8 @@ import {Router} from '@angular/router';
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
+  path = '/api/com.galgeleg.webapp/rest';
+  // path = 'http://localhost:8080/rest';
   loggedIn = false;
   loginName: string;
   loginPassword: string;
@@ -28,12 +30,6 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.imagePath = 'assets/images/forkert6.png';
-    this.http
-      .get(
-        '/api/com.galgeleg.webapp/galgeleg/test2').subscribe(
-      response => console.log(response),
-      err => console.log(err)
-    );
   }
 
   /*
@@ -47,7 +43,7 @@ export class WelcomeComponent implements OnInit {
   */
 
   onLogin() {
-    // todo slet console.log(this.loginName + this.loginPassword);
+    console.log(this.loginName + this.loginPassword);
     this.postLogin(this.loginInfo)
       .subscribe(
         response => this.onLoginSucces(response),
@@ -62,7 +58,7 @@ export class WelcomeComponent implements OnInit {
     console.log('Sending data');
     return this.http
       .post(
-        '/api/com.galgeleg.webapp/brugerLogin',
+        this.path + '/brugerLogin',
         loginModel);
   }
 
@@ -74,7 +70,7 @@ export class WelcomeComponent implements OnInit {
     console.log(response);
     this.user = new UserModel(response.brugernavn, response.email, response.fornavn, response.efternavn, response.ekstraFelter.webside);
     this.loggedIn = true;
-    this.router.navigate(['/game', { }]);
+    this.router.navigate(['/game', {}]);
   }
 
 
