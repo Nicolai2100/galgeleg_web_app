@@ -14,7 +14,7 @@ import {UserdataService} from '../shared/userdata.service';
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
-  path = '/api/com.galgeleg.webapp/rest';
+  path = 'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/rest/';
   // path = 'http://localhost:8080/rest';
   loggedIn = false;
   loginName: string;
@@ -43,10 +43,10 @@ export class WelcomeComponent implements OnInit {
   }
 
   postLogin(loginModel = new LoginModel(this.loginName, this.loginPassword)): Observable<any> {
-    console.log('Sending data');
+    console.log('Sending login data');
     return this.http
       .post(
-        this.path + '/brugerLogin',
+        this.path + 'brugerLogin',
         loginModel);
   }
 

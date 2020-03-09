@@ -17,8 +17,9 @@ interface BogstavModel {
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
-  path = '/api/com.galgeleg.webapp/rest';
+  path = 'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/rest/';
   // path = 'http://localhost:8080/rest';
+
   user: UserModel;
   imagePath = 'assets/images/galge.png';
   wrongGuessString = '';
@@ -34,7 +35,10 @@ export class GameComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.userDataService.user;
-    this.fetchStartGameData();
+
+    console.log(this.userDataService.user.fornavn);
+    this.postStartGameData();
+
   }
 
   onClick() {
@@ -48,9 +52,10 @@ export class GameComponent implements OnInit {
     this.guessnum++;
   }
 
-  private fetchStartGameData() {
+  private postStartGameData() {
+    console.log('Sending post request to start game');
     this.http.post<GameInterface>(
-      this.path + '/galgeleg/' + this.user.brugernavn, {})
+      this.path + 'galgeleg/' + this.user.brugernavn, {})
       .subscribe(
         response => this.onResponse(response),
         err => console.log(err));
@@ -74,7 +79,7 @@ export class GameComponent implements OnInit {
   onGuessLetter(bogstav: string) {
     this.http
       .get<GameInterface>(
-        this.path + '/galgeleg/s185020/' + bogstav)
+        this.path + 'galgeleg/' + this.user.brugernavn + '/' + bogstav)
       .subscribe(
         response => this.onResponse(response),
         err => console.log(err));

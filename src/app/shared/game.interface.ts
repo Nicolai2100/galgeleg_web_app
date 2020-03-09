@@ -7,5 +7,5 @@ export interface GameInterface {
   synligtOrd: string;
   erSpilletVundet: boolean;
   erSpilletSlut: boolean;
-
+  ordet: string;
 }
