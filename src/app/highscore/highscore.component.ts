@@ -5,6 +5,7 @@ import {UserdataService} from '../shared/userdata.service';
 import {UserModel} from '../shared/user.model';
 import {HttpClient} from '@angular/common/http';
 import {GameInterface} from '../shared/game.interface';
+import {HighscoreModel} from './Highscore.Model';
 
 @Component({
   selector: 'app-highscore',
@@ -17,14 +18,18 @@ export class HighscoreComponent implements OnInit {
   game: GameModel;
   user: UserModel;
   str: string;
-  highScoreList: string[];
+  highScoreList: HighscoreModel[] = [];
 
   constructor(private httpClient: HttpClient,
               private gameDataService: GamedataService,
               private userDataService: UserdataService) {
+    this.highScoreList.push(new HighscoreModel(1, 'Nicolai L', 'Bil', 0, new Date()));
+    this.highScoreList.push(new HighscoreModel(2, 'Sercan', 'Motorvej', 1, new Date()));
+    this.highScoreList.push(new HighscoreModel(3, 'Sersan', 'Bil', 3, new Date()));
   }
 
   ngOnInit() {
+    /*
     this.game = this.gameDataService.game;
     this.user = this.userDataService.user;
     if (this.game.spilVundet) {
@@ -33,16 +38,17 @@ export class HighscoreComponent implements OnInit {
       this.str = 'Trist ' + this.user.fornavn + '... Du har tabt!';
     }
 
-    this.getHighScore();
+    this.getHighScores();
+     */
   }
 
-  private getHighScore() {
-    this.httpClient.get(
+  private getHighScores() {
+    this.httpClient.get<HighscoreModel[]>(
       this.path + 'galgeleg/highscore')
       .subscribe(
-        response => console.log(response),
+        response => {
+          this.highScoreList = response;
+        },
         err => console.log(err));
   }
-
-
 }

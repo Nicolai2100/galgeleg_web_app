@@ -1,3 +1,21 @@
-{{str}}
-
-<div><ul><li *ngFor=""></li></ul></div>
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Brugernavn</th>
+        <th scope="col">Ord</th>
+        <th scope="col">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let highscore of highScoreList; index as i">
+        <th scope="row">{{i + 1}}</th>
+        <td>{{highscore.name}}</td>
+        <td>{{highscore.word}}</td>
+        <td>{{highscore.score}}</td>
+        <td>{{highscore.date.toLocaleString('en-GB', {timeZone: 'UTC'})}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
