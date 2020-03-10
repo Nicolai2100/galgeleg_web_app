@@ -44,20 +44,14 @@ export class HighscoreComponent implements OnInit {
   }
 
   private getHighScores() {
-    /*
-    this.http.get<GameInterface>(
-      this.path + 'galgeleg/' + this.user.brugernavn, {})
-      .subscribe(
-        response => this.onResponse(response),
-        err => console.log(err));
-     */
     console.log('fetching highscores...')
-    this.httpClient.get(
+    this.httpClient.get<any>(
       this.path + 'galgeleg/highscore')
       .subscribe(
         response => {
-          // this.highScoreList = response;
-          console.log(response);
+          response.forEach((s) => {
+            this.highScoreList.push(JSON.parse(s));
+          });
         },
         err => console.log(err));
   }

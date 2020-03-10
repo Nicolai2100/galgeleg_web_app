@@ -38,7 +38,6 @@ export class GameComponent implements OnInit {
 
     console.log(this.userDataService.user.fornavn);
     this.postStartGameData();
-
   }
 
   onClick() {
