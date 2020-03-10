@@ -13,8 +13,8 @@ import {HighscoreModel} from './Highscore.Model';
   styleUrls: ['./highscore.component.css']
 })
 export class HighscoreComponent implements OnInit {
-  path = 'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/rest/';
-  // path = 'http://localhost:8080/rest';
+  // path = 'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/rest/';
+  path = 'http://localhost:8080/rest/';
   game: GameModel;
   user: UserModel;
   str: string;
@@ -23,9 +23,9 @@ export class HighscoreComponent implements OnInit {
   constructor(private httpClient: HttpClient,
               private gameDataService: GamedataService,
               private userDataService: UserdataService) {
-    this.highScoreList.push(new HighscoreModel(1, 'Nicolai L', 'Bil', 0, new Date()));
-    this.highScoreList.push(new HighscoreModel(2, 'Sercan', 'Motorvej', 1, new Date()));
-    this.highScoreList.push(new HighscoreModel(3, 'Sersan', 'Bil', 3, new Date()));
+    // this.highScoreList.push(new HighscoreModel('Nicolai L', 'Bil', 0));
+    // this.highScoreList.push(new HighscoreModel('Sercan', 'Motorvej', 1));
+    // this.highScoreList.push(new HighscoreModel('Sersan', 'Bil', 3));
   }
 
   ngOnInit() {
@@ -40,14 +40,24 @@ export class HighscoreComponent implements OnInit {
 
     this.getHighScores();
      */
+    this.getHighScores();
   }
 
   private getHighScores() {
-    this.httpClient.get<HighscoreModel[]>(
+    /*
+    this.http.get<GameInterface>(
+      this.path + 'galgeleg/' + this.user.brugernavn, {})
+      .subscribe(
+        response => this.onResponse(response),
+        err => console.log(err));
+     */
+    console.log('fetching highscores...')
+    this.httpClient.get(
       this.path + 'galgeleg/highscore')
       .subscribe(
         response => {
-          this.highScoreList = response;
+          // this.highScoreList = response;
+          console.log(response);
         },
         err => console.log(err));
   }

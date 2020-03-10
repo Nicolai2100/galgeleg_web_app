@@ -1,15 +1,11 @@
 export class HighscoreModel {
-  place: number;
-  name: string;
   word: string;
+  username: string;
   score: number;
-  date: Date;
 
-  constructor(place: number, name: string, word: string, score: number, date: Date) {
-    this.place = place;
-    this.name = name;
+  constructor( name: string, word: string, score: number) {
+    this.username = name;
     this.word = word;
     this.score = score;
-    this.date = date;
   }
 }

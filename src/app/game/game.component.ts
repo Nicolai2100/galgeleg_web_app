@@ -17,8 +17,8 @@ interface BogstavModel {
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
-  path = 'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/rest/';
-  // path = 'http://localhost:8080/rest';
+  // path = 'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/rest/';
+  path = 'http://localhost:8080/rest/';
 
   user: UserModel;
   imagePath = 'assets/images/galge.png';
