@@ -21,11 +21,13 @@ export class GameComponent implements OnInit {
   // path = 'http://localhost:8080/rest/';
 
   user: UserModel;
+  private game: GameModel;
   imagePath = 'assets/images/galge.png';
   wrongGuessString = '';
   guessValue = '';
   synligtOrd;
   guessnum = 1;
+  private ordet: string;
 
   constructor(private http: HttpClient,
               private router: Router,
@@ -35,8 +37,6 @@ export class GameComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.userDataService.user;
-
-    console.log(this.userDataService.user.fornavn);
     this.postStartGameData();
   }
 
@@ -63,14 +63,19 @@ export class GameComponent implements OnInit {
   // Opdaterer al data
   private onResponse(response: GameInterface) {
     console.log(response);
+    this.ordet = response.ordet;
+
     if (response.erSpilletSlut[0]) {
-      this.gameDataService.addGame(new GameModel(response.synligtOrd,
+      this.gameDataService.addGame(new GameModel(
+        response.synligtOrd,
         response.antalForkerteBogstaver[0],
         response.erSpilletVundet[0]));
-      if (response.erSpilletVundet) {
+
+      if (response.erSpilletVundet[0]) {
         alert('Tillykke ' + this.user.fornavn + ', du vandt!');
       } else {
-        alert('Desværre, du tabte. Bedre held næste gang, ' + this.user.fornavn + '.');
+        alert('Desværre, du tabte. Bedre held næste gang, ' + this.user.fornavn + '.\n ' +
+          'Ordet var: ' + this.ordet);
       }
       this.router.navigate(['/highscore', {}]);
     } else {

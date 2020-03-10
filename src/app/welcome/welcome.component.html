@@ -1,16 +1,21 @@
-<h1 class="modal-title">Welcome to the hangman App!!!</h1>
+<object width="200" height="200" data="helloworld.swf" align="center">
 
+<h1 class="modal-title">Velkommen til Galgeleg!!!</h1>
 
+<br>
 <div class="row">
   <div class="col-xs-12">
-    <img class="img-responsive" src="{{imagePath}}"
-         style="max-height: 500px">
-  </div>
-<br>
-Bruger login
 
-<div class="form-group">
-  <div class="col-md-4">
+    <img class="img-responsive" src="{{imagePath}}"
+         style="max-height: 300px"
+
+
+    >
+  </div>
+
+
+  <h3>Bruger Login</h3>
+  <div class="form-group">
     <input id="name"
            name="name"
            type="text"
@@ -37,23 +42,16 @@ Bruger login
     <button id="singlebutton"
             name="singlebutton"
             class="btn btn-primary"
-            (click)="onLogin()">Log in!
+            (click)="onLogin()">Log ind
     </button>
   </div>
 </div>
 
 
-  <br>
+<br>
+{{welcomeMess}}
 
-  {{welcomeMess}}
-
-</div>
-<div *ngIf="loggedIn" class="row">
-  <div class="col-xs-12">
-    <a routerLink="/game">Go Play!</a>
-  </div>
-</div>
-
+</object>
 
 
 

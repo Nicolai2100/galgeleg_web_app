@@ -23,29 +23,15 @@ export class HighscoreComponent implements OnInit {
   constructor(private httpClient: HttpClient,
               private gameDataService: GamedataService,
               private userDataService: UserdataService) {
-    // this.highScoreList.push(new HighscoreModel('Nicolai L', 'Bil', 0));
-    // this.highScoreList.push(new HighscoreModel('Sercan', 'Motorvej', 1));
-    // this.highScoreList.push(new HighscoreModel('Sersan', 'Bil', 3));
   }
 
   ngOnInit() {
-    /*
-    this.game = this.gameDataService.game;
-    this.user = this.userDataService.user;
-    if (this.game.spilVundet) {
-      this.str = 'Tillykke ' + this.user.fornavn + '! Du har vundet!';
-    } else {
-      this.str = 'Trist ' + this.user.fornavn + '... Du har tabt!';
-    }
-
-    this.getHighScores();
-     */
     this.getHighScores();
   }
 
   private getHighScores() {
-    console.log('fetching highscores...')
-    this.httpClient.get<any>(
+    console.log('fetching highscores...');
+    this.httpClient.get<[]>(
       this.path + 'galgeleg/highscore')
       .subscribe(
         response => {

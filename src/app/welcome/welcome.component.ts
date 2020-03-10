@@ -5,7 +5,6 @@ import {Observable} from 'rxjs';
 import {UserModel} from '../shared/user.model';
 import {ResponseInterface} from './response.interface';
 import {Router} from '@angular/router';
-import {log} from 'util';
 import {UserdataService} from '../shared/userdata.service';
 
 @Component({
@@ -15,7 +14,7 @@ import {UserdataService} from '../shared/userdata.service';
 })
 export class WelcomeComponent implements OnInit {
   path = 'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/rest/';
-  // path = 'http://localhost:8080/rest';
+  // path = 'http://localhost:8080/rest/';
   loggedIn = false;
   loginName: string;
   loginPassword: string;
