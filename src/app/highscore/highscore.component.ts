@@ -13,8 +13,8 @@ import {HighscoreModel} from './Highscore.Model';
   styleUrls: ['./highscore.component.css']
 })
 export class HighscoreComponent implements OnInit {
-  // path = 'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/rest/';
-  path = 'http://localhost:8080/rest/';
+  path = 'http://ec2-13-48-132-112.eu-north-1.compute.amazonaws.com:8080/com.galgeleg.webapp/rest/';
+  // path = 'http://localhost:8080/rest/';
   game: GameModel;
   user: UserModel;
   str: string;
