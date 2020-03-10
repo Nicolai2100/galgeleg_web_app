@@ -67,6 +67,11 @@ export class GameComponent implements OnInit {
       this.gameDataService.addGame(new GameModel(response.synligtOrd,
         response.antalForkerteBogstaver[0],
         response.erSpilletVundet[0]));
+      if (response.erSpilletVundet) {
+        alert('Tillykke ' + this.user.fornavn + ', du vandt!');
+      } else {
+        alert('Desværre, du tabte. Bedre held næste gang, ' + this.user.fornavn + '.');
+      }
       this.router.navigate(['/highscore', {}]);
     } else {
       this.synligtOrd = response.synligtOrd;
